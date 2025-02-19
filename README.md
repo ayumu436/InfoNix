@@ -4,7 +4,7 @@ Boost your Linux system’s compatibility and performance with InfoNix – the m
 
 ---
 
-## 🚀 Features:
+##  Features:
 - Interactive UI with color-coded sections.
 - Detailed CPU, GPU, RAM, Storage, and Network information.
 - Driver checks for NVIDIA, AMD, Wi-Fi, Audio, and Bluetooth.
@@ -14,7 +14,7 @@ Boost your Linux system’s compatibility and performance with InfoNix – the m
 
 ---
 
-## 📥 Installation:
+##  Installation:
 ```bash
 git clone https://github.com/your-username/InfoNix.git
 cd InfoNix
