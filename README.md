@@ -21,8 +21,7 @@ git clone https://github.com/your-username/InfoNix.git
 cd InfoNix
 chmod +x hardware_checker.sh
 
-## Main Menu
+## 🖼️ Main Menu
 Here’s how the interactive main menu looks:
 
-![InfoNix Main Menu](https://github.com/ayumu436/InfoNix/blob/f4fbdcaa66b8e0711627d08d2380dc3fc95710cc/1.png)
-
+![InfoNix Main Menu](./1.png)
