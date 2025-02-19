@@ -1,3 +1,4 @@
+
 # InfoNix - Linux Hardware Compatibility Checker
 
 Boost your Linux system’s compatibility and performance with InfoNix – the most comprehensive hardware checker and diagnostic tool. 
@@ -23,4 +24,4 @@ chmod +x hardware_checker.sh
 ##  Main Menu
 Here’s how the interactive main menu looks:
 
-![InfoNix Main Menu](./main_menu_screenshot.png)
+![InfoNix Main Menu](./1.png)
