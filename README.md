@@ -24,4 +24,5 @@ chmod +x hardware_checker.sh
 ## 🖼️ Main Menu
 Here’s how the interactive main menu looks:
 
-![InfoNix Main Menu](./1.png)
+https://raw.githubusercontent.com/ayumu436/InfoNix/main/1.png
+
