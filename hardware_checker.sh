@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Ultimate Linux Hardware Compatibility Checker - Interactive Version
-# Author: ayumu
+# InfoNix - Ultimate Linux Hardware Compatibility Checker
 # Version: 2.0.0
+# Author: ayumu
+# Description: Professional-grade hardware scanner with enhanced UI, driver detection, temperature monitoring, and export options.
 
 # Colors for output
 RED='\033[0;31m'
@@ -11,38 +12,49 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-LOG_FILE="hardware_check.log"
+LOG_FILE="infonix_report.log"
+EXPORT_DIR="infonix_exports"
 
-# Check for required commands
+# Required Commands
+REQUIRED_CMDS=("lspci" "lsusb" "hwinfo" "dmidecode" "lsblk" "sensors" "nvme" "dialog")
+
+# Function to check and install missing commands
 check_dependencies() {
-    REQUIRED_CMDS=("lspci" "lsusb" "hwinfo" "dmidecode" "lsblk")
+    echo -e "${BLUE}🔍 Checking dependencies...${NC}"
     for cmd in "${REQUIRED_CMDS[@]}"; do
         if ! command -v $cmd &> /dev/null; then
             echo -e "${YELLOW}⚠️  $cmd not found. Installing...${NC}"
             sudo pacman -S --noconfirm $cmd || sudo apt install -y $cmd || sudo dnf install -y $cmd
+        else
+            echo -e "${GREEN}✅ $cmd is installed.${NC}"
         fi
     done
 }
 
 # Display Main Menu
 main_menu() {
-    OPTION=$(whiptail --title "Linux Hardware Checker" --menu "Choose an option:" 20 60 6 \
-        "1" "Scan CPU, GPU, RAM, Storage" \
-        "2" "Scan Network & USB Devices" \
-        "3" "Check for Missing Drivers" \
-        "4" "Export Report" \
-        "5" "Exit" 3>&1 1>&2 2>&3)
+    OPTION=$(dialog --clear --title "InfoNix - Ultimate Hardware Checker" \
+        --menu "Choose an option:" 20 60 8 \
+        "1" "Core Hardware Scan" \
+        "2" "Network & USB Devices" \
+        "3" "Driver Check" \
+        "4" "Temperature Monitoring" \
+        "5" "Battery Status" \
+        "6" "Export Report" \
+        "7" "Exit" 3>&1 1>&2 2>&3)
 
     case $OPTION in
         1) scan_core_hardware ;;
         2) scan_network_usb ;;
         3) check_drivers ;;
-        4) export_report ;;
-        5) exit ;;
+        4) monitor_temperature ;;
+        5) battery_status ;;
+        6) export_report ;;
+        7) exit ;;
     esac
 }
 
-# Scan CPU, GPU, RAM, and Storage
+# Core Hardware Scan
 scan_core_hardware() {
     OUTPUT="🖥️ CPU Info:\n$(lscpu | grep -E 'Model name|Architecture|CPU MHz')\n\n"
     OUTPUT+="🎮 GPU Info:\n$(lspci | grep -E 'VGA|3D|Display')\n\n"
@@ -50,25 +62,24 @@ scan_core_hardware() {
     OUTPUT+="💾 Storage Devices:\n$(lsblk -d -o NAME,MODEL,SIZE,ROTA)\n\n"
 
     echo -e "$OUTPUT" >> $LOG_FILE
-    whiptail --title "Core Hardware Info" --msgbox "$OUTPUT" 20 80
+    dialog --title "Core Hardware Info" --msgbox "$OUTPUT" 20 80
     main_menu
 }
 
-# Scan Network & USB Devices
+# Network & USB Devices
 scan_network_usb() {
     OUTPUT="🌐 Network Interfaces:\n$(lspci | grep -i 'network')\n\n"
     OUTPUT+="🔌 USB Devices:\n$(lsusb)\n\n"
 
     echo -e "$OUTPUT" >> $LOG_FILE
-    whiptail --title "Network & USB Devices" --msgbox "$OUTPUT" 20 80
+    dialog --title "Network & USB Devices" --msgbox "$OUTPUT" 20 80
     main_menu
 }
 
-# Check for Missing Drivers
+# Driver Check
 check_drivers() {
     OUTPUT="🔍 Checking for missing drivers...\n"
 
-    # Check for NVIDIA
     if lspci | grep -E 'VGA|3D|Display' | grep -qi 'NVIDIA'; then
         if ! lsmod | grep -qi 'nvidia'; then
             OUTPUT+="⚠️  NVIDIA GPU detected but drivers are missing.\n"
@@ -76,7 +87,6 @@ check_drivers() {
         fi
     fi
 
-    # Check for AMD
     if lspci | grep -E 'VGA|3D|Display' | grep -qi 'AMD'; then
         if ! lsmod | grep -qi 'amdgpu'; then
             OUTPUT+="⚠️  AMD GPU detected but drivers are missing.\n"
@@ -85,16 +95,36 @@ check_drivers() {
     fi
 
     echo -e "$OUTPUT" >> $LOG_FILE
-    whiptail --title "Driver Check" --msgbox "$OUTPUT" 20 80
+    dialog --title "Driver Check" --msgbox "$OUTPUT" 20 80
+    main_menu
+}
+
+# Temperature Monitoring
+monitor_temperature() {
+    OUTPUT="🌡️ Temperature Monitoring:\n\n"
+    OUTPUT+="$(sensors)\n"
+    echo -e "$OUTPUT" >> $LOG_FILE
+    dialog --title "Temperature Monitoring" --msgbox "$OUTPUT" 20 80
+    main_menu
+}
+
+# Battery Status
+battery_status() {
+    OUTPUT="🔋 Battery Status:\n\n"
+    OUTPUT+="$(upower -i $(upower -e | grep BAT) | grep -E 'state|to\ full|percentage|time')\n"
+    echo -e "$OUTPUT" >> $LOG_FILE
+    dialog --title "Battery Status" --msgbox "$OUTPUT" 20 80
     main_menu
 }
 
 # Export Report
 export_report() {
-    whiptail --title "Export Report" --msgbox "Report saved to $LOG_FILE" 10 50
+    mkdir -p $EXPORT_DIR
+    cp $LOG_FILE $EXPORT_DIR/infonix_report.txt
+    dialog --title "Export Report" --msgbox "Report saved to $EXPORT_DIR" 10 50
     main_menu
 }
 
-# Start
+# Start the Script
 check_dependencies
 main_menu
