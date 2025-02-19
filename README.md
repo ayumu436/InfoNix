@@ -1,28 +1,22 @@
+# InfoNix - Linux Hardware Compatibility Checker  
 
-# InfoNix - Linux Hardware Compatibility Checker
-
-Boost your Linux system’s compatibility and performance with InfoNix – the most comprehensive hardware checker and diagnostic tool. 
-
----
-
-##  Features:
-- Interactive UI with color-coded sections.
-- Detailed CPU, GPU, RAM, Storage, and Network information.
-- Driver checks for NVIDIA, AMD, Wi-Fi, Audio, and Bluetooth.
-- Real-time temperature and battery monitoring.
-- Export reports in `.txt`, `.json`, and `.html`.
-- Fast and efficient with optimized command execution.
+Boost your Linux system’s compatibility and performance with InfoNix – the most comprehensive hardware checker and diagnostic tool.  
 
 ---
 
-##  Installation:
+## 🚀 Features:  
+- **Interactive UI** with color-coded sections.  
+- **Detailed Hardware Information** (CPU, GPU, RAM, Storage, Network).  
+- **Driver Checks** for NVIDIA, AMD, Wi-Fi, Audio, and Bluetooth.  
+- **Real-time Monitoring** (Temperature & Battery Status).  
+- **Export Reports** in `.txt`, `.json`, and `.html`.  
+- **Fast and Efficient** with optimized command execution.  
+
+---
+
+## 📥 Installation:  
+Clone the repository and set up the script:  
 ```bash
-git clone https://github.com/your-username/InfoNix.git
+git clone https://github.com/ayumu436/InfoNix.git
 cd InfoNix
 chmod +x hardware_checker.sh
-
-## 🖼️ Main Menu
-Here’s how the interactive main menu looks:
-
-https://raw.githubusercontent.com/ayumu436/InfoNix/main/1.png
-
